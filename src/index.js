@@ -6,8 +6,6 @@ const php = require("./php");
 const fpm = require("./fpm");
 const applicationVersion = require("../package.json").version;
 
-const currentVersion = php.current();
-
 if (process.argv.length === 2) {
   process.argv.push("status");
 }
@@ -17,7 +15,7 @@ const renderStatus = () => {
     chalk`\n  {green PHP Version Manager} version {yellow ${applicationVersion}}\n`
   );
 
-  const version = currentVersion;
+  const version = php.current();
   const cli = php.moduleStatus(version, "cli", "xdebug");
   const fpm = php.moduleStatus(version, "fpm", "xdebug");
 
@@ -57,6 +55,7 @@ program
   .command("ls")
   .description("List available PHP versions")
   .action(() => {
+    const currentVersion = php.current();
     php.versions().forEach(version => {
       if (version === currentVersion) {
         console.log(chalk.green(version));
@@ -91,6 +90,7 @@ program
   .description("Manage XDebug status")
   .action((toggle, sapi) => {
     if (toggle === undefined) {
+      const currentVersion = php.current();
       const cliStatus = php.moduleStatus(currentVersion, "cli", "xdebug");
       const fpmStatus = php.moduleStatus(currentVersion, "fpm", "xdebug");
 
