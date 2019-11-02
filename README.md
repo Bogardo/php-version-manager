@@ -1,8 +1,12 @@
 # PHP Version Manager
 
+<a href="https://www.npmjs.com/package/php-version-manager"><img src="https://img.shields.io/npm/v/php-version-manager.svg?style=flat-square" alt="NPM"></a>
+<a href="https://npmcharts.com/compare/php-version-manager?minimal=true"><img src="https://img.shields.io/npm/dt/php-version-manager.svg?style=flat-square" alt="NPM"></a>
+<a href="https://www.npmjs.com/package/php-version-manager"><img src="https://img.shields.io/npm/l/php-version-manager.svg?style=flat-square" alt="NPM"></a>
+
 ## Installation
 
-```
+```bash
 npm install --global php-version-manager
 ```
 
