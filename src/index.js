@@ -4,6 +4,7 @@ const commander = require("commander");
 const chalk = require("chalk");
 const php = require("./php");
 const fpm = require("./fpm");
+const applicationVersion = require("../package.json").version;
 
 const currentVersion = php.current();
 
@@ -13,7 +14,7 @@ if (process.argv.length === 2) {
 
 const renderStatus = () => {
   console.log(
-    chalk`\n  {green PHP Version Manager} version {yellow ${program.version()}}\n`
+    chalk`\n  {green PHP Version Manager} version {yellow ${applicationVersion}}\n`
   );
 
   const version = currentVersion;
@@ -33,9 +34,13 @@ const program = new commander.Command();
 
 program
   .name("pvm")
-  .version("0.1.0", "-v, --version", "Output the current application version")
+  .version(
+    applicationVersion,
+    "-v, --version",
+    "Output the current application version"
+  )
   .description(
-    chalk`{green PHP Version Manager} version {yellow ${program.version()}}`
+    chalk`{green PHP Version Manager} version {yellow ${applicationVersion}}`
   );
 
 program
