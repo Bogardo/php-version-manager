@@ -86,11 +86,35 @@ const moduleDisable = (module, sapi) => {
   execSync(`sudo /usr/sbin/phpdismod ${sapi} ${module}`);
 };
 
+const moduleToggle = (module, sapi) => {
+  const currentVersion = current();
+
+  let cliStatus;
+  let fpmStatus;
+
+  if (sapi === "cli" || sapi === undefined) {
+    cliStatus = moduleStatus(currentVersion, "cli", module);
+  }
+
+  if (sapi === "fpm" || sapi === undefined) {
+    fpmStatus = moduleStatus(currentVersion, "fpm", module);
+  }
+
+  if (cliStatus === true || fpmStatus === true) {
+    moduleDisable(module, sapi);
+    return false;
+  } else {
+    moduleEnable(module, sapi);
+    return true;
+  }
+};
+
 module.exports = {
   current,
   versions,
   use,
   moduleStatus,
   moduleEnable,
-  moduleDisable
+  moduleDisable,
+  moduleToggle
 };

@@ -28,7 +28,7 @@ Commands:
   status|s                  Show current PHP version status
   ls                        List available PHP versions
   use|u <version>           Switch PHP version
-  xdebug|x [toggle] [sapi]  Manage XDebug status
+  xdebug|x [sapi] [status]  Manage XDebug status
   restart|r                 Restart PHP-FPM and NGINX
 
 ```
@@ -70,17 +70,26 @@ pvm use 7.2
 ### Manage XDebug
 
 ```bash
-# Enable XDebug
+# Toggle XDebug for cli and fpm
+pvm xdebug
+
+# Enable XDebug for cli and fpm
 pvm xdebug on
 
-# Disable XDebug
+# Disable XDebug for cli and fpm
 pvm xdebug off
 
 # Enable XDebug for cli only
-pvm xdebug on cli
+pvm xdebug cli on
 
 # Disable XDebug for fpm only
-pvm xdebug off fpm
+pvm xdebug fpm off
+
+# Toggle XDebug for cli
+pvm xdebug cli
+
+# Toggle XDebug for fpm
+pvm xdebug fpm
 ```
 
 ### Restart Nginx and PHP-FPM

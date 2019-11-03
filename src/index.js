@@ -35,8 +35,9 @@ program
   .version(
     applicationVersion,
     "-v, --version",
-    "Output the current application version"
+    "output the current application version"
   )
+  .usage("[command] [options]")
   .description(
     chalk`{green PHP Version Manager} version {yellow ${applicationVersion}}`
   );
@@ -85,30 +86,38 @@ program
   });
 
 program
-  .command("xdebug [toggle] [sapi]")
+  .command("xdebug [sapi] [status]")
   .alias("x")
   .description("Manage XDebug status")
-  .action((toggle, sapi) => {
-    if (toggle === undefined) {
-      const currentVersion = php.current();
-      const cliStatus = php.moduleStatus(currentVersion, "cli", "xdebug");
-      const fpmStatus = php.moduleStatus(currentVersion, "fpm", "xdebug");
+  .action((sapi, status) => {
+    const enableOptions = ["1", "on", "yes", "y"];
+    const disableOptions = ["0", "off", "no", "n"];
 
-      if (cliStatus || fpmStatus) {
-        php.moduleDisable("xdebug");
-      } else {
-        php.moduleEnable("xdebug");
-      }
-
-      console.log("Restarting PHP-FPM and NGINX");
-      fpm.restart();
-
-      renderStatus();
-
-      process.exit(0);
+    if (
+      status === undefined &&
+      (enableOptions.includes(sapi) || disableOptions.includes(sapi))
+    ) {
+      status = sapi;
+      sapi = undefined;
     }
 
-    switch (toggle) {
+    if (sapi !== undefined && !["fpm", "cli"].includes(sapi)) {
+      throw new Error(`Invalid SAPI \'${sapi}\', specify \'fpm\' or \'cli\'`);
+    }
+
+    if (status === undefined) {
+      php.moduleToggle("xdebug", sapi);
+    } else if (enableOptions.includes(status)) {
+      php.moduleEnable("xdebug", sapi);
+    } else if (disableOptions.includes(status)) {
+      php.moduleDisable("xdebug", sapi);
+    } else {
+      throw new Error(`Invalid status \'${status}\'`);
+    }
+
+    switch (status) {
+      case undefined:
+        break;
       case "1":
       case "on":
       case "yes":
@@ -122,8 +131,7 @@ program
         php.moduleDisable("xdebug", sapi);
         break;
       default:
-        console.error("Invalid option");
-        process.exit(1);
+        throw new Error(`Invalid status \'${status}\'`);
     }
 
     if (sapi === "fpm" || sapi === undefined) {
