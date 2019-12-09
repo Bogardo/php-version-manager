@@ -16,12 +16,10 @@ const current = () =>
  * @return {Array.string}
  */
 const versions = () =>
-  execSync("find /etc/php -maxdepth 1 -type d | tail -n +2")
+  execSync("find /usr/bin -name 'php*.*' -type f | cut -b 13- | sort -g")
     .toString()
     .trim()
-    .replace(/\/etc\/php\//g, "")
-    .split("\n")
-    .sort((a, b) => a - b);
+    .split("\n");
 
 /**
  * Switch default PHP Version
