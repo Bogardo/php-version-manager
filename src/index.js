@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const commander = require("commander");
-const chalk = require("chalk");
 const php = require("./php");
 const fpm = require("./fpm");
 const applicationVersion = require("../package.json").version;
@@ -11,21 +10,18 @@ if (process.argv.length === 2) {
 }
 
 const renderStatus = () => {
-  console.log(
-    chalk`\n  {green PHP Version Manager} version {yellow ${applicationVersion}}\n`
+  console.log( `PHP Version Manager version \n ${applicationVersion}`
   );
 
   const version = php.current();
   const cli = php.moduleStatus(version, "cli", "xdebug");
   const fpm = php.moduleStatus(version, "fpm", "xdebug");
 
-  const phpText = "PHP: " + chalk.blue.bold(version);
-  const cliText =
-    "CLI: " + (cli ? chalk.green.bold("ON") : chalk.red.bold("OFF"));
-  const fpmText =
-    "FPM: " + (fpm ? chalk.green.bold("ON") : chalk.red.bold("OFF"));
+  const phpText = "PHP: " + version;
+  const cliText = "CLI: " + (cli ? "ON" : "OFF");
+  const fpmText = "FPM: " + (fpm ? "ON" : "OFF");
 
-  console.log("  " + [phpText, cliText, fpmText].join("   ") + "\n");
+  console.log("  " + [phpText, cliText, fpmText].join("\n"));
 };
 
 const program = new commander.Command();
@@ -38,9 +34,7 @@ program
     "output the current application version"
   )
   .usage("[command] [options]")
-  .description(
-    chalk`{green PHP Version Manager} version {yellow ${applicationVersion}}`
-  );
+  .description(`PHP Version Manager version ${applicationVersion}`);
 
 program
   .command("status")
@@ -59,7 +53,7 @@ program
     const currentVersion = php.current();
     php.versions().forEach(version => {
       if (version === currentVersion) {
-        console.log(chalk.green(version));
+        console.log(version);
       } else {
         console.log(version);
       }
