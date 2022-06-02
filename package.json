@@ -9,9 +9,18 @@
   "keywords": [
     "cli",
     "php",
-    "pvm"
+    "version manager",
+    "versioning",
+    "command-line"
   ],
   "author": "Chris <chris@bogardo.com>",
+  "contributors": [
+    {
+      "name": "Brennan Goewert",
+      "email": "brennan@goewert.me",
+      "url": "https://bgoewert.com"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "commander": "^3.0.2"
