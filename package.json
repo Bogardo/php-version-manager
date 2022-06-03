@@ -3,6 +3,7 @@
   "version": "0.3.1",
   "description": "Linux command line tool for managing locally installed PHP versions.",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"no test specified\" && exit 0"
   },

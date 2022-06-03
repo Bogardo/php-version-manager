@@ -1,4 +1,4 @@
-const { execSync } = require("child_process");
+import { execSync } from "child_process";
 
 /**
  * Get currently active PHP version number
@@ -107,7 +107,7 @@ const moduleToggle = (module, sapi) => {
   }
 };
 
-module.exports = {
+export {
   current,
   versions,
   use,

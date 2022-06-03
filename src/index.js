@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 
-const commander = require("commander");
-const php = require("./php");
-const fpm = require("./fpm");
-const applicationVersion = require("../package.json").version;
+import * as php from "./php.js";
+import * as fpm from "./fpm.js";
+import * as commander from "commander";
+import packageConfig from "../package.json" assert {type: 'json'};
+
 
 if (process.argv.length === 2) {
   process.argv.push("status");
 }
 
 const renderStatus = () => {
-  console.log( `PHP Version Manager version \n ${applicationVersion}`
+  console.log( `PHP Version Manager version \n ${packageConfig.version}`
   );
 
   const version = php.current();
@@ -29,12 +30,12 @@ const program = new commander.Command();
 program
   .name("pvm")
   .version(
-    applicationVersion,
+    packageConfig.version,
     "-v, --version",
     "output the current application version"
   )
   .usage("[command] [options]")
-  .description(`PHP Version Manager version ${applicationVersion}`);
+  .description(`PHP Version Manager version ${packageConfig.version}`);
 
 program
   .command("status")

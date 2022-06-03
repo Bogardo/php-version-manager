@@ -1,5 +1,5 @@
-const { execSync } = require("child_process");
-const { versions } = require("./php");
+import { execSync } from "child_process";
+import { versions } from "./php.js";
 
 /**
  * Restart PHP-FPM and NGINX services
@@ -14,6 +14,6 @@ const restart = () => {
   return true;
 };
 
-module.exports = {
+export {
   restart
 };
