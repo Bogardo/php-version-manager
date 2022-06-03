@@ -11,18 +11,17 @@ if (process.argv.length === 2) {
 }
 
 const renderStatus = () => {
-  console.log( `PHP Version Manager version \n ${packageConfig.version}`
-  );
+  console.log("\x1b[32m%s\x1b[0m %s \x1b[33m%s\x1b[0m", "PHP Version Manager", "version \n", packageConfig.version);
 
   const version = php.current();
   const cli = php.moduleStatus(version, "cli", "xdebug");
   const fpm = php.moduleStatus(version, "fpm", "xdebug");
 
-  const phpText = "PHP: " + version;
-  const cliText = "CLI: " + (cli ? "ON" : "OFF");
-  const fpmText = "FPM: " + (fpm ? "ON" : "OFF");
+  const phpText = "PHP: \x1b[34m" + version + "\x1b[0m";
+  const cliText = "CLI: " + (cli ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
+  const fpmText = "FPM: " + (fpm ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
 
-  console.log("  " + [phpText, cliText, fpmText].join("\n"));
+  console.log([phpText, cliText, fpmText].join("\n"));
 };
 
 const program = new commander.Command();
@@ -35,7 +34,7 @@ program
     "output the current application version"
   )
   .usage("[command] [options]")
-  .description(`PHP Version Manager version ${packageConfig.version}`);
+  .description("\x1b[32m%s\x1b[0m %s \x1b[33m%s\x1b[0m", "PHP Version Manager", "version \n", packageConfig.version);
 
 program
   .command("status")
@@ -54,7 +53,7 @@ program
     const currentVersion = php.current();
     php.versions().forEach(version => {
       if (version === currentVersion) {
-        console.log(version);
+        console.log("\x1b[32m%s\x1b[0m", version);
       } else {
         console.log(version);
       }
