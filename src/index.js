@@ -2,6 +2,7 @@
 
 import * as php from "./php.js";
 import * as fpm from "./fpm.js";
+import * as nginx from "./nginx.js";
 import commander from "commander";
 import packageConfig from "../package.json" assert {type: 'json'};
 
@@ -15,7 +16,7 @@ const renderStatus = () => {
 
   const phpText = "PHP: \x1b[33m" + php.current() + "\x1b[0m";
   const cliText = "CLI: " + (php.status() ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
-  const fpmText = "FPM: " + (fpm.status() ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
+  const fpmText = "FPM: " + (fpm.status() ? ("\x1b[32mON\x1b[0m" + (nginx.status() == 'running' ? "\x1b[32m(Nginx)\x1b[0m" : "")) : "\x1b[31mOFF\x1b[0m");
 
   console.log([phpText, cliText, fpmText].join("\n"));
 };
