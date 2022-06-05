@@ -1,3 +1,7 @@
+/**
+ * @module fpm
+ */
+
 import { execSync } from "child_process";
 import { query as phpQuery, current as currentPhpVersion } from "./php.js";
 import * as nginx from "./nginx.js";

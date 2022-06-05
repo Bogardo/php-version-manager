@@ -1,3 +1,7 @@
+/**
+ * @module nginx
+ */
+
 import { execSync } from "child_process";
 
 /**

@@ -1,3 +1,7 @@
+/**
+ * @module php
+ */
+
 import { execSync } from "child_process";
 import * as fpm from "./fpm.js";
 
@@ -49,7 +53,7 @@ const use = version => {
  * Perform a phpquery.
  *
  * @param {string} version PHP Version
- * @param {string} sapi    SAPI name (e.g. cli, fpm, apache2)
+ * @param {string} sapi    SAPI name (e.g. cli, fpm)
  * @param {string} module  PHP Module name (optional)
  *
  * @return {boolean}
@@ -93,20 +97,18 @@ const moduleDisable = (module, sapi) => {
   execSync(`sudo /usr/sbin/phpdismod ${sapi} ${module}`);
 };
 
+/**
+ * Toggle the module on or off.
+ * @param {string} module 
+ * @param {string} sapi 
+ * @returns {boolean} true if enabled, false if disabled.
+ */
 const moduleToggle = (module, sapi) => {
-  const currentVersion = current();
-
-  let cliStatus;
-  let fpmStatus = query(currentPhpVersion(), "fpm");
-
-  if (sapi === "cli" || sapi === undefined) {
-    cliStatus = query(currentVersion, "cli", module);
-  }
-
-  if (cliStatus === true || fpmStatus === true) {
+  let modStatus = query(current(), sapi, module);
+  if (modStatus) {
     moduleDisable(module, sapi);
     return false;
-  } else {
+  } else if (!modStatus) {
     moduleEnable(module, sapi);
     return true;
   }
