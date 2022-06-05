@@ -2,7 +2,7 @@
 
 import * as php from "./php.js";
 import * as fpm from "./fpm.js";
-import * as commander from "commander";
+import commander from "commander";
 import packageConfig from "../package.json" assert {type: 'json'};
 
 
@@ -11,13 +11,13 @@ if (process.argv.length === 2) {
 }
 
 const renderStatus = () => {
-  console.log("\x1b[32m%s\x1b[0m %s \x1b[33m%s\x1b[0m", "PHP Version Manager", "version \n", packageConfig.version);
+  console.log("\x1b[32m%s\x1b[0m \x1b[33m%s\x1b[0m", "PHP Version Manager", packageConfig.version);
 
   const version = php.current();
   const cli = php.moduleStatus(version, "cli", "xdebug");
   const fpm = php.moduleStatus(version, "fpm", "xdebug");
 
-  const phpText = "PHP: \x1b[34m" + version + "\x1b[0m";
+  const phpText = "PHP: \x1b[33m" + version + "\x1b[0m";
   const cliText = "CLI: " + (cli ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
   const fpmText = "FPM: " + (fpm ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
 
