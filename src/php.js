@@ -64,6 +64,14 @@ const query = (version, sapi, module=undefined) => {
 };
 
 /**
+ * Get the php cli status.
+ * @returns {boolean}
+ */
+const status = () => {
+  return query(current(), 'cli');
+};
+
+/**
  * Enable PHP Module
  *
  * @param {string} module
@@ -109,6 +117,7 @@ export {
   versions,
   use,
   query,
+  status,
   moduleEnable,
   moduleDisable,
   moduleToggle

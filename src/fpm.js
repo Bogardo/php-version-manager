@@ -1,5 +1,15 @@
 import { execSync } from "child_process";
 import { query as phpQuery, current as currentPhpVersion } from "./php.js";
+import * as nginx from "./nginx.js";
+
+/**
+ * Return the module status for the current version.
+ * 
+ * @return {boolean}
+ */
+const status = () => {
+  return phpQuery(currentPhpVersion(), "fpm");
+};
 
 /**
  * Restart PHP-FPM and NGINX services
@@ -15,5 +25,6 @@ const restart = () => {
 };
 
 export {
+  status,
   restart
 };
