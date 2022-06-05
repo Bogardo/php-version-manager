@@ -13,13 +13,9 @@ if (process.argv.length === 2) {
 const renderStatus = () => {
   console.log("\x1b[32m%s\x1b[0m \x1b[33m%s\x1b[0m", "PHP Version Manager", packageConfig.version);
 
-  const version = php.current();
-  const cli = php.moduleStatus(version, "cli", "xdebug");
-  const fpm = php.moduleStatus(version, "fpm", "xdebug");
-
-  const phpText = "PHP: \x1b[33m" + version + "\x1b[0m";
-  const cliText = "CLI: " + (cli ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
-  const fpmText = "FPM: " + (fpm ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
+  const phpText = "PHP: \x1b[33m" + php.current() + "\x1b[0m";
+  const cliText = "CLI: " + (php.status() ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
+  const fpmText = "FPM: " + (fpm.status() ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
 
   console.log([phpText, cliText, fpmText].join("\n"));
 };
@@ -67,11 +63,20 @@ program
   .alias("u")
   .description("Switch PHP version")
   .action(version => {
-    if (/^\d\d$/.test(version)) {
+    
+    // Validate version
+    let strVersion = toString(version);
+    if (strVersion.length == 2 && !strVersion.includes('.')) {
+      console.log('Version incorrect: ' + version);
       version = version.slice(0, 1) + "." + version.slice(1);
+      console.log('Updated version: ' + version);
+    } else if (strVersion.length > 2 && strVersion.length < 2 && !strVersion.includes('.')){
+      console.log('Invalid version: ' + version);
+      return false;
     }
-
-    if (php.use(version)) {
+    
+    // Switch version and restart relevant services
+    if (php.use(version) && fpm.status()) {
       console.log("Restarting PHP-FPM and NGINX");
       fpm.restart();
     }

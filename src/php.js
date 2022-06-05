@@ -1,4 +1,5 @@
 import { execSync } from "child_process";
+import * as fpm from "./fpm.js";
 
 /**
  * Get currently active PHP version number
@@ -45,17 +46,17 @@ const use = version => {
 };
 
 /**
- * Get the status of a PHP module
+ * Perform a phpquery.
  *
  * @param {string} version PHP Version
- * @param {string} sapi    SAPI name (cli or fpm)
- * @param {string} module  PHP Module name
+ * @param {string} sapi    SAPI name (e.g. cli, fpm, apache2)
+ * @param {string} module  PHP Module name (optional)
  *
  * @return {boolean}
  */
-const moduleStatus = (version, sapi, module) => {
+const query = (version, sapi, module=undefined) => {
   try {
-    execSync(`phpquery -v ${version} -s ${sapi} -m ${module}`);
+    execSync(`phpquery -v ${version} -s ${sapi}` + (module ? ` -m ${module}` : ''));
     return true;
   } catch (error) {
     return false;
@@ -88,14 +89,10 @@ const moduleToggle = (module, sapi) => {
   const currentVersion = current();
 
   let cliStatus;
-  let fpmStatus;
+  let fpmStatus = query(currentPhpVersion(), "fpm");
 
   if (sapi === "cli" || sapi === undefined) {
-    cliStatus = moduleStatus(currentVersion, "cli", module);
-  }
-
-  if (sapi === "fpm" || sapi === undefined) {
-    fpmStatus = moduleStatus(currentVersion, "fpm", module);
+    cliStatus = query(currentVersion, "cli", module);
   }
 
   if (cliStatus === true || fpmStatus === true) {
@@ -111,7 +108,7 @@ export {
   current,
   versions,
   use,
-  moduleStatus,
+  query,
   moduleEnable,
   moduleDisable,
   moduleToggle
