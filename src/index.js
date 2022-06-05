@@ -3,6 +3,7 @@
 import * as php from "./php.js";
 import * as fpm from "./fpm.js";
 import * as nginx from "./nginx.js";
+import * as color from "./color.js";
 import commander from "commander";
 import packageConfig from "../package.json" assert {type: 'json'};
 
@@ -12,11 +13,11 @@ if (process.argv.length === 2) {
 }
 
 const renderStatus = () => {
-  console.log("\x1b[32m%s\x1b[0m \x1b[33m%s\x1b[0m", "PHP Version Manager", packageConfig.version);
+  console.log(color.blue("PHP Version Manager") + " " + color.green(packageConfig.version));
 
-  const phpText = "PHP: \x1b[33m" + php.current() + "\x1b[0m";
-  const cliText = "CLI: " + (php.status() ? "\x1b[32mON\x1b[0m" : "\x1b[31mOFF\x1b[0m");
-  const fpmText = "FPM: " + (fpm.status() ? ("\x1b[32mON\x1b[0m" + (nginx.status() == 'running' ? "\x1b[32m(Nginx)\x1b[0m" : "")) : "\x1b[31mOFF\x1b[0m");
+  const phpText = "PHP: " + color.green(php.current());
+  const cliText = "CLI: " + (php.status() ? color.green("ON") : color.red("OFF"));
+  const fpmText = "FPM: " + (fpm.status() ? color.green("ON" + (nginx.status() == 'running' ? "\x1b[32m(Nginx)\x1b[0m" : "")) : color.red("OFF"));
 
   console.log([phpText, cliText, fpmText].join("\n"));
 };
@@ -31,7 +32,7 @@ program
     "output the current application version"
   )
   .usage("[command] [options]")
-  .description("\x1b[32m%s\x1b[0m %s \x1b[33m%s\x1b[0m", "PHP Version Manager", "version \n", packageConfig.version);
+  .description(color.blue("PHP Version Manager") + " " + color.yellow(packageConfig.version));
 
 program
   .command("status")
@@ -50,7 +51,7 @@ program
     const currentVersion = php.current();
     php.versions().forEach(version => {
       if (version === currentVersion) {
-        console.log("\x1b[32m%s\x1b[0m", version);
+        console.log(color.green(version));
       } else {
         console.log(version);
       }
