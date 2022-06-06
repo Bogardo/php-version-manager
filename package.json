@@ -3,18 +3,27 @@
   "version": "0.3.1",
   "description": "Linux command line tool for managing locally installed PHP versions.",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"no test specified\" && exit 0"
   },
   "keywords": [
     "cli",
     "php",
-    "pvm"
+    "version manager",
+    "versioning",
+    "command-line"
   ],
   "author": "Chris <chris@bogardo.com>",
+  "contributors": [
+    {
+      "name": "Brennan Goewert",
+      "email": "brennan@goewert.me",
+      "url": "https://bgoewert.com"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
-    "chalk": "^2.4.2",
     "commander": "^3.0.2"
   },
   "devDependencies": {

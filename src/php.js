@@ -1,4 +1,9 @@
-const { execSync } = require("child_process");
+/**
+ * @module php
+ */
+
+import { execSync } from "child_process";
+import * as fpm from "./fpm.js";
 
 /**
  * Get currently active PHP version number
@@ -45,21 +50,29 @@ const use = version => {
 };
 
 /**
- * Get the status of a PHP module
+ * Perform a phpquery.
  *
  * @param {string} version PHP Version
- * @param {string} sapi    SAPI name (cli or fpm)
- * @param {string} module  PHP Module name
+ * @param {string} sapi    SAPI name (e.g. cli, fpm)
+ * @param {string} module  PHP Module name (optional)
  *
  * @return {boolean}
  */
-const moduleStatus = (version, sapi, module) => {
+const query = (version, sapi, module=undefined) => {
   try {
-    execSync(`phpquery -v ${version} -s ${sapi} -m ${module}`);
+    execSync(`phpquery -v ${version} -s ${sapi}` + (module ? ` -m ${module}` : ''));
     return true;
   } catch (error) {
     return false;
   }
+};
+
+/**
+ * Get the php cli status.
+ * @returns {boolean}
+ */
+const status = () => {
+  return query(current(), 'cli');
 };
 
 /**
@@ -84,34 +97,29 @@ const moduleDisable = (module, sapi) => {
   execSync(`sudo /usr/sbin/phpdismod ${sapi} ${module}`);
 };
 
+/**
+ * Toggle the module on or off.
+ * @param {string} module 
+ * @param {string} sapi 
+ * @returns {boolean} true if enabled, false if disabled.
+ */
 const moduleToggle = (module, sapi) => {
-  const currentVersion = current();
-
-  let cliStatus;
-  let fpmStatus;
-
-  if (sapi === "cli" || sapi === undefined) {
-    cliStatus = moduleStatus(currentVersion, "cli", module);
-  }
-
-  if (sapi === "fpm" || sapi === undefined) {
-    fpmStatus = moduleStatus(currentVersion, "fpm", module);
-  }
-
-  if (cliStatus === true || fpmStatus === true) {
+  let modStatus = query(current(), sapi, module);
+  if (modStatus) {
     moduleDisable(module, sapi);
     return false;
-  } else {
+  } else if (!modStatus) {
     moduleEnable(module, sapi);
     return true;
   }
 };
 
-module.exports = {
+export {
   current,
   versions,
   use,
-  moduleStatus,
+  query,
+  status,
   moduleEnable,
   moduleDisable,
   moduleToggle
