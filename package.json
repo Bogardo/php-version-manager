@@ -1,6 +1,6 @@
 {
   "name": "php-version-manager",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Linux command line tool for managing locally installed PHP versions.",
   "main": "src/index.js",
   "type": "module",
